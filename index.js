@@ -1,11 +1,13 @@
 const express = require('express')
+const cors = require ('cors')
 const mongoose = require('mongoose');
 require('dotenv').config();
 
 const app = express()
-const port = 3002
+const port = 5000
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
+app.use(cors())
 
 //schema
     const itemSchema = new mongoose.Schema({
@@ -17,7 +19,7 @@ app.use(express.urlencoded({extended: true}))
         type: Number,
         required: true
       },
-      info :{
+      description :{
         type: String,
         required: true
       },
@@ -47,12 +49,12 @@ const uri = `${process.env.DB_URL}`;
     })
 
 //create data
-    app.post('/items', async (req,res)=>{
+    app.post('/post-items', async (req,res)=>{
         try{
             const newItem = new itemModel({
                 title: req.body.title,
                 price: req.body.price,
-                info: req.body.info,
+                description: req.body.description,
             })
             const savenewItem = await newItem.save()
             res.status(201).send(savenewItem)
@@ -62,7 +64,7 @@ const uri = `${process.env.DB_URL}`;
         }
     })
 //read data
-    app.get('/items', async(req,res)=>{
+    app.get('/get-items', async(req,res)=>{
         try{
             const items = await itemModel.find()
             if(items){
@@ -116,7 +118,7 @@ app.put('/items/:id', async (req,res)=>{
             $set: {
                 title: req.body.title,
                 price: req.body.price,
-                info: req.body.info
+                description: req.body.description
             }
         })
         if(item){
@@ -142,3 +144,5 @@ app.put('/items/:id', async (req,res)=>{
     console.log(`Server is running ${port}`);
     await connectDB()
     })
+
+module.exports=app
