@@ -17,7 +17,7 @@ app.use(express.urlencoded({extended: true}))
         type: Number,
         required: true
       },
-      info:{
+      info :{
         type: String,
         required: true
       },
@@ -26,7 +26,7 @@ app.use(express.urlencoded({extended: true}))
     const itemModel = mongoose.model("Items", itemSchema)
 
 //connected db
-const uri = ``;
+const uri = `${process.env.DB_URL}`;
    console.log(uri);
     const connectDB = async () => {
         try{
